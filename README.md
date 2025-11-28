@@ -769,7 +769,7 @@ GO
 
 ## 👨‍💻 Autor
 
-**[Tu Nombre]**
+Andres Felipe Correa Ramirez
 - Video: https://youtu.be/ZPGjUgVC1CI
 - GitHub: [@tuusuario](https://github.com/tuusuario)
 
