@@ -771,7 +771,7 @@ GO
 
 Andres Felipe Correa Ramirez
 - Video: https://youtu.be/ZPGjUgVC1CI
-- GitHub: [@tuusuario](https://github.com/tuusuario)
+- GitHub: https://github.com/af95correa-rgb/TallerFinal
 
 ---
 
