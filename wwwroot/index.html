@@ -1,0 +1,385 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast" class="toast hidden"></div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>📊 Employee MS</h2>
+            <div class="user-info" id="userInfo">
+                <span class="user-name">Guest</span>
+                <span class="user-role badge">Not Logged</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="#" data-view="login" class="nav-item active">
+                <span class="nav-icon">🔐</span>
+                <span class="nav-text">Login</span>
+            </a>
+            <a href="#" data-view="dashboard" class="nav-item disabled">
+                <span class="nav-icon">📊</span>
+                <span class="nav-text">Dashboard</span>
+            </a>
+            <a href="#" data-view="departments" class="nav-item disabled">
+                <span class="nav-icon">🏢</span>
+                <span class="nav-text">Departments</span>
+            </a>
+            <a href="#" data-view="employees" class="nav-item disabled">
+                <span class="nav-icon">👥</span>
+                <span class="nav-text">Employees</span>
+            </a>
+            <a href="#" data-view="dependents" class="nav-item disabled">
+                <span class="nav-icon">👨‍👩‍👧‍👦</span>
+                <span class="nav-text">Dependents</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button id="logoutBtn" class="btn btn-logout hidden">
+                <span>🚪</span> Logout
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Login View -->
+        <div id="loginView" class="view active">
+            <div class="login-container">
+                <div class="login-card">
+                    <div class="login-header">
+                        <h1>🔐 Welcome Back</h1>
+                        <p>Sign in to access the Employee Management System</p>
+                    </div>
+
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" value="admin" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" value="Admin123!" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block">
+                            Sign In
+                        </button>
+                    </form>
+
+                    <div class="login-info">
+                        <p><strong>Demo Credentials:</strong></p>
+                        <p>Username: <code>admin</code></p>
+                        <p>Password: <code>Admin123!</code></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard View -->
+        <div id="dashboardView" class="view">
+            <div class="view-header">
+                <h1>📊 Dashboard</h1>
+                <p>Overview of your Employee Management System</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">🏢</div>
+                    <div class="stat-info">
+                        <h3 id="totalDepartments">0</h3>
+                        <p>Departments</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-info">
+                        <h3 id="totalEmployees">0</h3>
+                        <p>Employees</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">👨‍👩‍👧‍👦</div>
+                    <div class="stat-info">
+                        <h3 id="totalDependents">0</h3>
+                        <p>Dependents</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-info">
+                        <h3 id="avgSalary">$0</h3>
+                        <p>Avg. Salary</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-content">
+                <div class="card">
+                    <h3>📈 Quick Stats</h3>
+                    <div id="quickStats">Loading...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Departments View -->
+        <div id="departmentsView" class="view">
+            <div class="view-header">
+                <h1>🏢 Departments</h1>
+                <button class="btn btn-primary" onclick="openDepartmentModal()">
+                    ➕ New Department
+                </button>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>Location</th>
+                            <th>Employees</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="departmentsTableBody">
+                        <tr>
+                            <td colspan="5" class="text-center">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Employees View -->
+        <div id="employeesView" class="view">
+            <div class="view-header">
+                <h1>👥 Employees</h1>
+                <button class="btn btn-primary" onclick="openEmployeeModal()">
+                    ➕ New Employee
+                </button>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Position</th>
+                            <th>Department</th>
+                            <th>Salary</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="employeesTableBody">
+                        <tr>
+                            <td colspan="6" class="text-center">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Dependents View -->
+        <div id="dependentsView" class="view">
+            <div class="view-header">
+                <h1>👨‍👩‍👧‍👦 Dependents</h1>
+                <button class="btn btn-primary" onclick="openDependentModal()">
+                    ➕ New Dependent
+                </button>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Employee</th>
+                            <th>Relationship</th>
+                            <th>Age</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dependentsTableBody">
+                        <tr>
+                            <td colspan="5" class="text-center">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Department Modal -->
+    <div id="departmentModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="departmentModalTitle">New Department</h2>
+                <button class="btn-close" onclick="closeDepartmentModal()">×</button>
+            </div>
+            <form id="departmentForm">
+                <input type="hidden" id="departmentId">
+                <div class="form-group">
+                    <label for="deptName">Name *</label>
+                    <input type="text" id="deptName" required>
+                </div>
+                <div class="form-group">
+                    <label for="deptCode">Code *</label>
+                    <input type="text" id="deptCode" required>
+                </div>
+                <div class="form-group">
+                    <label for="deptDescription">Description</label>
+                    <textarea id="deptDescription" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="deptLocation">Location</label>
+                    <input type="text" id="deptLocation">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeDepartmentModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Employee Modal -->
+    <div id="employeeModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="employeeModalTitle">New Employee</h2>
+                <button class="btn-close" onclick="closeEmployeeModal()">×</button>
+            </div>
+            <form id="employeeForm">
+                <input type="hidden" id="employeeId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="empFirstName">First Name *</label>
+                        <input type="text" id="empFirstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="empLastName">Last Name *</label>
+                        <input type="text" id="empLastName" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="empEmail">Email *</label>
+                    <input type="email" id="empEmail" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="empPhone">Phone</label>
+                        <input type="tel" id="empPhone">
+                    </div>
+                    <div class="form-group">
+                        <label for="empHireDate">Hire Date *</label>
+                        <input type="date" id="empHireDate" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="empPosition">Position</label>
+                        <input type="text" id="empPosition">
+                    </div>
+                    <div class="form-group">
+                        <label for="empSalary">Salary *</label>
+                        <input type="number" id="empSalary" min="0" step="0.01" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="empDepartment">Department</label>
+                    <select id="empDepartment">
+                        <option value="">Select Department</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeEmployeeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dependent Modal -->
+    <div id="dependentModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="dependentModalTitle">New Dependent</h2>
+                <button class="btn-close" onclick="closeDependentModal()">×</button>
+            </div>
+            <form id="dependentForm">
+                <input type="hidden" id="dependentId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="depFirstName">First Name *</label>
+                        <input type="text" id="depFirstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="depLastName">Last Name *</label>
+                        <input type="text" id="depLastName" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="depDateOfBirth">Date of Birth *</label>
+                    <input type="date" id="depDateOfBirth" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="depRelationship">Relationship *</label>
+                        <select id="depRelationship" required>
+                            <option value="">Select...</option>
+                            <option value="Hijo">Hijo</option>
+                            <option value="Hija">Hija</option>
+                            <option value="Cónyuge">Cónyuge</option>
+                            <option value="Padre">Padre</option>
+                            <option value="Madre">Madre</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="depGender">Gender</label>
+                        <select id="depGender">
+                            <option value="">Select...</option>
+                            <option value="Masculino">Masculino</option>
+                            <option value="Femenino">Femenino</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="depIdNumber">ID Number</label>
+                    <input type="text" id="depIdNumber">
+                </div>
+                <div class="form-group">
+                    <label for="depEmployee">Employee *</label>
+                    <select id="depEmployee" required>
+                        <option value="">Select Employee</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeDependentModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
